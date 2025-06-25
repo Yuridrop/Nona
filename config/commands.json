@@ -1,0 +1,16 @@
+{
+    "basic" : {
+
+        "help" : {
+
+            "description" : "Get help for a single command or all of them.",
+            "usage"       : "help [command](optional)"
+        }
+
+    },
+    "discord" : {
+
+
+
+    }
+}

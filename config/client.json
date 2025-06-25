@@ -1,0 +1,21 @@
+{
+    "Nona" : {
+
+        "Discord" : {
+
+            "Tokens" : [
+                
+                ""
+            ],
+
+            "userToken" : ""
+
+        },
+        "Misc" : {
+
+            "Developer" : "coded",
+            "Repo"      : "https://github.com/yuridrop/nona"
+
+        }
+    }
+}
