@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         }
     }
     else {
-        mode = "c";
+        mode = (char*)"c";
     }
 
     // Detect operating system, if Windows hard-select CLI.
@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 
     std::ifstream client("../../config/client.json");
     if (!client) {
-        std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Unable to open commands.json." << std::endl;
+        std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Unable to open client.json." << std::endl;
     }
 
     json config;
@@ -108,6 +108,7 @@ int main(int argc, char* argv[]) {
     // c = Command Line Interface | ( CLI )
     // g = Graphical User Interface | ( GUI )
 
-    (mode == "g") ? loadGUI() : loadCLI();
+    if (!mode) mode = (char*)"g";
+    (strcmp(mode , "g") == 0) ? loadGUI() : loadCLI();
 
 }

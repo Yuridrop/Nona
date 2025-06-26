@@ -13,9 +13,18 @@
 #include "../misc/colours.h"
 #include "../misc/time.h"
 #include "../redis/dispatcher.h"
-#include "../redis/precache.h"
+#include "../redis/precaching.h"
 
 dpp::snowflake guild_id;
+
+dpp::snowflake return_guild_id() {
+
+    /*
+    Return the victim's guild ID.
+    */
+
+    return guild_id;
+}
 
 void on_ready_event(dpp::cluster& Nona , int clientNum) {
 
@@ -37,22 +46,22 @@ void on_ready_event(dpp::cluster& Nona , int clientNum) {
                     std::string guild_id_str;
                     std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << "Please enter the ID of the guild you want to attack: " << std::endl;
                     std::cin >> guild_id_str;
-                    //guild_id = std::stoull(guild_id_str);
+                    bool found = false;
                     for (const auto &guild : event.guilds) {
                         if (std::stoull(guild_id_str) == guild) {
                             guild_id = std::stoull(guild_id_str);
+                            found = true;
                             break;
                         }
-                        else {
-                            std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "The guild ID " << guild_id << " is invalid, please try again." << std::endl;
-                        }
                     }
+                    if (found) break;
+                    std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "The guild ID " << guild_id << " is invalid, please try again." << std::endl;
                 }
 
                 precache_objects(Nona , guild_id);
             }
 
-            // Redis logic:2
+            // Redis logic:
 
             std::thread worker([&Nona]() {
                 try {

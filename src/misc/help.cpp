@@ -40,9 +40,10 @@ void help(std::string command = "default") {
         if (commands.contains("discord") && commands["discord"].is_object()) {
             for (auto &[command_name , command_info] : commands["discord"].items()) {
                 std::string description = command_info.value("description" , "No Description");
-                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << command_name << ": " << description << std::endl;            
-        }
-        }
+                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << command_name << ": " << description << std::endl;    
+            }
+        }        
+    }
         else {
             std::cout << MAG << "[ " << getCurrentTime() << " ]" << RED << "Invalid JSON data structure." << std::endl;
         }
