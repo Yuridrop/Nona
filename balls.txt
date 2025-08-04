@@ -1,4 +1,0 @@
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /home/frieren/Desktop/Nona-V3.0.0/CPP/build
-[  7%] Building CXX object CMakeFiles/Nona.dir/src/redis/precaching.cpp.o

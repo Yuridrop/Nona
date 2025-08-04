@@ -12,13 +12,13 @@
 #include "client.h"
 #include "events/on_ready.h"
 
-void loadEvents(dpp::cluster &Nona , int clientNum) {
+void loadEvents(dpp::cluster &Nona , int clientNum , int total_bots) {
 
     /*
     Load all of Nona's events.
     */
 
-    on_ready_event(Nona , clientNum);
+    on_ready_event(Nona , clientNum , total_bots);
 
 }
 

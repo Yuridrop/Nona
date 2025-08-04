@@ -70,9 +70,11 @@ target_include_directories(Nona PRIVATE ${CMAKE_SOURCE_DIR}/src)
 # Link libraries provided by vcpkg.
 
 target_link_libraries(Nona PRIVATE
+
     dpp::dpp
-    unofficial::redis++::redis++
+    redis++::redis++_static
     nlohmann_json::nlohmann_json
     OpenSSL::SSL
     OpenSSL::Crypto
+
 )

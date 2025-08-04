@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
 // External library imports.
 
@@ -15,24 +17,12 @@
 #include "../redis/dispatcher.h"
 #include "../redis/precaching.h"
 
-dpp::snowflake guild_id;
+std::mutex ready_mutex;
+std::condition_variable all_ready_cv;
+int ready_bots = 0;
 
-dpp::snowflake return_guild_id() {
-
-    /*
-    Return the victim's guild ID.
-    */
-
-    return guild_id;
-}
-
-void on_ready_event(dpp::cluster& Nona , int clientNum) {
-
-    /*
-    Tell when one of Nona's clients is online and set a presence.
-    */
-
-    Nona.on_ready([&Nona , clientNum](const dpp::ready_t& event) {
+void on_ready_event(dpp::cluster& Nona , int clientNum , int total_bots) {
+    Nona.on_ready([&Nona , clientNum , total_bots](const dpp::ready_t& event) {
         try {
             dpp::activity botActivity;
             botActivity.type = dpp::activity_type::at_game;
@@ -41,47 +31,31 @@ void on_ready_event(dpp::cluster& Nona , int clientNum) {
             Nona.set_presence(dpp::presence(dpp::ps_online , botActivity));
             std::cout << MAG << "[ " << getCurrentTime() << " ] " << GRN << "Nona #" << clientNum << " (" << Nona.me.username << ") is online." << std::endl;
 
-            if (clientNum == 0) {
-                while (true) {
-                    std::string guild_id_str;
-                    std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << "Please enter the ID of the guild you want to attack: " << std::endl;
-                    std::cin >> guild_id_str;
-                    bool found = false;
-                    for (const auto &guild : event.guilds) {
-                        if (std::stoull(guild_id_str) == guild) {
-                            guild_id = std::stoull(guild_id_str);
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found) break;
-                    std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "The guild ID " << guild_id << " is invalid, please try again." << std::endl;
-                }
-
-                precache_objects(Nona , guild_id);
-            }
-
-            // Redis logic:
-
+            // Redis logic
             std::thread worker([&Nona]() {
                 try {
                     sw::redis::Redis redis("tcp://127.0.0.1:6379");
                     while (true) {
-                        std::vector<std::string> result;
-                        auto reply = redis.blpop("job_queue" , 0);
+                        auto reply = redis.blpop("job_queue", 0);
                         if (reply) {
-                            std::string job_string = reply -> second;
-                            dispatch_job(Nona , job_string);
+                            std::string job_string = reply->second;
+                            dispatch_job(Nona, job_string);
                         }
                     }
-                }
-                catch (const std::exception &error) {
-                    std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "An error occurred within Redis: " << error.what() << std::endl;
+                } catch (const std::exception &error) {
+                    std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Redis error: " << error.what() << std::endl;
                 }
             });
+            worker.detach();
 
-        }
-        catch (const std::exception& error) {
+            {
+                std::lock_guard<std::mutex> lock(ready_mutex);
+                ready_bots++;
+                if (ready_bots == total_bots) {
+                    all_ready_cv.notify_one();
+                }
+            }
+        } catch (const std::exception& error) {
             std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Error in on_ready for bot #" << clientNum << ": " << error.what() << std::endl;
         }
     });

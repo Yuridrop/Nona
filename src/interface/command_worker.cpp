@@ -66,7 +66,7 @@ void push_create_channel_job(const dpp::snowflake &guild_id) {
     json job = {
         {"command" , "create_channel"},
         {"args" , {
-            {"guild_id" , guild_id},
+            {"guild_id" , std::to_string(guild_id)},
             {"name" , name}
         }}
     };
