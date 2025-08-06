@@ -50,7 +50,7 @@ bool validate(std::string command) {
         return true;
     }
     else if (commands["discord"].contains(command)) {
-        return false;
+        return true;
     }
     else {
         return false;

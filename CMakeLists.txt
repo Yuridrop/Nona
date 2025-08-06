@@ -27,7 +27,7 @@ set(SOURCES
     src/index.cpp
     src/redis/dispatcher.cpp
     src/redis/precaching.cpp
-    src/misc/commandValidating.cpp
+    src/misc/validate_command.cpp
     src/misc/help.cpp
     src/misc/strToLower.cpp
     src/misc/time.cpp
@@ -43,11 +43,12 @@ set(SOURCES
 
 set(HEADERS
 
+    src/index.h
     src/client.h
     src/redis/dispatcher.h
     src/redis/precaching.h
     src/misc/colours.h
-    src/misc/commandValidating.h
+    src/misc/validate_command.h
     src/misc/help.h
     src/misc/strToLower.h
     src/misc/time.h

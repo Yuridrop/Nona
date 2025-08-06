@@ -1,5 +1,5 @@
-#ifndef INDEX_h
-#define INDEX_h
+#ifndef INDEX_H
+#define INDEX_H
 
 // Standard library imports.
 

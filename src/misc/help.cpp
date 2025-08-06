@@ -21,7 +21,7 @@ void help(std::string command = "default") {
     The help command (and flag).
     */
 
-    std::ifstream command_dictionary("../../config/commands.json");
+    std::ifstream command_dictionary("config/commands.json");
     if (!command_dictionary) {
         std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Unable to open commands.json." << std::endl;
     }
@@ -35,15 +35,20 @@ void help(std::string command = "default") {
             for (auto &[command_name , command_info] : commands["basic"].items()) {
                 std::string description = command_info.value("description" , "No Description.");
                 std::string usage       = command_info.value("usage" , "No usage.");
-                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << command_name << "\n    Description: " << description << "\n    Usage:" << usage << std::endl;
+                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT 
+                << command_name << "\n               Description: " << description 
+                << "\n               Usage:       " << usage << std::endl;
             }
-        if (commands.contains("discord") && commands["discord"].is_object()) {
+        }
+        if (commands.contains("discord") && commands["discord"].is_object()) { 
             for (auto &[command_name , command_info] : commands["discord"].items()) {
-                std::string description = command_info.value("description" , "No Description");
-                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << command_name << ": " << description << std::endl;    
+                std::string description = command_info.value("description" , "No Description.");
+                std::string usage       = command_info.value("usage" , "No usage.");
+                std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT 
+                << command_name << "\n               Description: " << description 
+                << "\n               Usage:       " << usage << std::endl;
             }
-        }        
-    }
+        }
         else {
             std::cout << MAG << "[ " << getCurrentTime() << " ]" << RED << "Invalid JSON data structure." << std::endl;
         }

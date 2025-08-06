@@ -13,13 +13,12 @@
 #include "../../misc/colours.h"
 #include "../../misc/time.h"
 
-void create_channel(dpp::cluster &Nona , const std::string guild_id_str , const std::string channelName) {
+void create_channel(dpp::cluster &Nona , const dpp::snowflake guild_id , const std::string channelName) {
 
     /*
     Create a channel in the server.
     */
 
-    dpp::snowflake guild_id = std::stoull(guild_id_str);
     dpp::channel new_channel;
     new_channel.guild_id = guild_id;
     new_channel.name = channelName;

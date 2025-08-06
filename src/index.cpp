@@ -15,14 +15,14 @@
 
 // Custom module imports.
 
+#include "client.h"
+#include "events/on_ready.h"
+#include "interface/loadGUI.h"
+#include "interface/loadCLI.h"
 #include "misc/colours.h"
 #include "misc/time.h"
 #include "misc/help.h"
-#include "events/on_ready.h"
 #include "redis/precaching.h"
-#include "interface/loadGUI.h"
-#include "interface/loadCLI.h"
-#include "client.h"
 
 using json = nlohmann::json;
 
@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
             if (strcmp(argv[1] , "--help") == 0 || strcmp(argv[1] , "-h") == 0) {
                 std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << "Command selected: help" << std::endl;
                 (argv[2] != nullptr) ? help(argv[2]) : help();
+                return 1;
             }
             else if (strcmp(argv[1] , "--gui") == 0 || strcmp(argv[1] , "-g") == 0) {
                 std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << "Mode selected: GUI" << std::endl;
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
                 mode = (char*)"c";
             }
             else {
-                std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "[ ERROR ][ index.cpp ] \"" << argv[1] << "\"" << "is not a valid mode, please try again." << std::endl;
+                std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "[ ERROR ][ index.cpp ] \"" << argv[1] << "\"" << " is not a valid mode, please try again." << std::endl;
                 return 1;
             }
         }
@@ -174,6 +175,7 @@ int main(int argc, char* argv[]) {
             std::string guild_id_str;
             std::cout << MAG << "[ " << getCurrentTime() << " ] " << WHT << "Please enter the ID of the guild you want to attack: ";
             std::cin >> guild_id_str;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max() , '\n');
             try {
                 guild_id = std::stoull(guild_id_str);
                 break;

@@ -26,7 +26,7 @@ std::string returnChannelName() {
     Return a random channel name from the variables.json file.
     */
 
-    std::ifstream variables("../../config/variables.json");
+    std::ifstream variables("config/variables.json");
     if (!variables) {
         std::cout << MAG << "[ " << getCurrentTime() << " ] " << RED << "Unable to open variables.json." << std::endl;
         return "YuridropOnTop";
@@ -70,6 +70,5 @@ void push_create_channel_job(const dpp::snowflake &guild_id) {
             {"name" , name}
         }}
     };
-
-    redis.rpush("job_queue" , job.dump());
+    auto result = redis.rpush("job_queue" , job.dump());
 }
