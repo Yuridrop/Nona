@@ -23,6 +23,7 @@
 #include "misc/time.h"
 #include "misc/help.h"
 #include "redis/precaching.h"
+#include "redis/rate_limiter.h"
 
 using json = nlohmann::json;
 
@@ -136,7 +137,8 @@ int main(int argc, char* argv[]) {
                 botThreads.emplace_back([i , &tokens , total_bots] {
                     std::string token = tokens[i];
                     dpp::cluster Nona(token);
-                    loadEvents(Nona , i , total_bots);
+                    auto limiter = std::make_shared<RateLimiter>(49);
+                    loadEvents(Nona , i , total_bots , limiter);
                     loadCogs(Nona); // Potentially redundant?
                     Nona.start(dpp::st_wait);
                 });

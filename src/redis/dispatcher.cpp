@@ -15,10 +15,11 @@
 #include "../misc/colours.h"
 #include "../misc/time.h"
 #include "../cogs/channels/create.h"
+#include "../redis/rate_limiter.h"
 
 using json = nlohmann::json;
 
-void dispatch_job(dpp::cluster &Nona , const std::string &job_json) {
+void dispatch_job(dpp::cluster &Nona , const std::string &job_json , std::shared_ptr<RateLimiter> limiter) {
 
     /*
     Dispatch a job from the Redis queue to the command requested.
@@ -34,7 +35,7 @@ void dispatch_job(dpp::cluster &Nona , const std::string &job_json) {
         if (command == "create_channel") {
             dpp::snowflake guild_id = std::stoull(args["guild_id"].get<std::string>());
             std::string name = args["name"];
-            create_channel(Nona , guild_id , name);
+            create_channel(Nona , guild_id , name , limiter);
         }
         
     }

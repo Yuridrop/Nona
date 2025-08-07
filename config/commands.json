@@ -12,6 +12,10 @@
         "createchannel" : {
             "description" : "Create a single channel in the guild",
             "usage"       : "createchannel"
+        },
+        "createchannels" : {
+            "description" : "Create the maximum amount of channels in the guild",
+            "usage"       : "createchannels"
         }
 
     }

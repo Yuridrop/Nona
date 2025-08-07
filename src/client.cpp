@@ -12,13 +12,13 @@
 #include "client.h"
 #include "events/on_ready.h"
 
-void loadEvents(dpp::cluster &Nona , int clientNum , int total_bots) {
+void loadEvents(dpp::cluster &Nona , int clientNum , int total_bots , std::shared_ptr<RateLimiter> limiter) {
 
     /*
     Load all of Nona's events.
     */
 
-    on_ready_event(Nona , clientNum , total_bots);
+    on_ready_event(Nona , clientNum , total_bots , limiter);
 
 }
 

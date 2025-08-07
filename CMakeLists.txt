@@ -27,6 +27,7 @@ set(SOURCES
     src/index.cpp
     src/redis/dispatcher.cpp
     src/redis/precaching.cpp
+    src/redis/rate_limiter.cpp
     src/misc/validate_command.cpp
     src/misc/help.cpp
     src/misc/strToLower.cpp
@@ -36,6 +37,7 @@ set(SOURCES
     src/interface/loadGUI.cpp
     src/events/on_ready.cpp
     src/cogs/channels/create.cpp
+    src/cogs/channels/delete.cpp
 
 )
 
@@ -47,6 +49,7 @@ set(HEADERS
     src/client.h
     src/redis/dispatcher.h
     src/redis/precaching.h
+    src/redis/rate_limiter.h
     src/misc/colours.h
     src/misc/validate_command.h
     src/misc/help.h
@@ -57,6 +60,7 @@ set(HEADERS
     src/interface/loadGUI.h
     src/events/on_ready.h
     src/cogs/channels/create.h
+    src/cogs/channels/delete.h
 
 )
 

@@ -16,18 +16,19 @@
 #include "../misc/time.h"
 #include "../redis/dispatcher.h"
 #include "../redis/precaching.h"
+#include "../redis/rate_limiter.h"
 
 std::mutex ready_mutex;
 std::condition_variable all_ready_cv;
 int ready_bots = 0;
 
-void on_ready_event(dpp::cluster& Nona , int client_number , int total_bots) {
+void on_ready_event(dpp::cluster& Nona , int client_number , int total_bots , std::shared_ptr<RateLimiter> limiter) {
 
     /*
     The event that is called for each iteration of Nona.
     */
 
-    Nona.on_ready([&Nona , client_number , total_bots](const dpp::ready_t& event) {
+    Nona.on_ready([&Nona , client_number , total_bots , limiter](const dpp::ready_t& event) {
 
         try {
             dpp::activity botActivity;
@@ -39,14 +40,14 @@ void on_ready_event(dpp::cluster& Nona , int client_number , int total_bots) {
 
             // Redis logic
 
-            std::thread worker([&Nona]() {
+            std::thread worker([&Nona , limiter]() {
                 try {
                     sw::redis::Redis redis("tcp://127.0.0.1:6379/0");
                     while (true) {
                         auto reply = redis.blpop("job_queue", 0);
                         if (reply) {
                             std::string job_string = reply -> second;
-                            dispatch_job(Nona , job_string);
+                            dispatch_job(Nona , job_string , limiter);
                         }
                     }
                 } catch (const std::exception &error) {

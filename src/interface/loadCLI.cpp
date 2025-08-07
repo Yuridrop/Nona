@@ -79,8 +79,10 @@ void loadCLI() {
             {"help", [](const std::string &arg) { help(arg); }}
         };
 
-        std::unordered_map<std::string, std::function<void(dpp::snowflake)>> discord_functions = {
-            {"createchannel", push_create_channel_job}
+        std::unordered_map<std::string, std::function<void(dpp::snowflake , std::optional<dpp::snowflake>)>> discord_functions = {
+            {"createchannel" , [](dpp::snowflake guild_id)},
+            {"createchannels" , push_create_channels_job},
+            {"deletechanel" , push_delete_channel_job()}
         };
 
         if (!validate(command)) {
